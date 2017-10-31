@@ -30,19 +30,42 @@ class appProdProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBundle\R
         }
 
 
-        // homepage
+        // default_index
         if ('' === $trimmedPathinfo) {
-            if (substr($pathinfo, -1) !== '/') {
-                return $this->redirect($pathinfo.'/', 'homepage');
+            if ('GET' !== $canonicalMethod) {
+                $allow[] = 'GET';
+                goto not_default_index;
             }
 
-            return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::indexAction',  '_route' => 'homepage',);
-        }
+            if (substr($pathinfo, -1) !== '/') {
+                return $this->redirect($pathinfo.'/', 'default_index');
+            }
 
-        // app_lucky_number
-        if ('/lucky/number' === $pathinfo) {
-            return array (  '_controller' => 'AppBundle\\Controller\\LuckyController::numberAction',  '_route' => 'app_lucky_number',);
+            return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::indexAction',  '_route' => 'default_index',);
         }
+        not_default_index:
+
+        // default_pruebas
+        if ('/pruebas' === $pathinfo) {
+            if (!in_array($canonicalMethod, array('POST', 'GET'))) {
+                $allow = array_merge($allow, array('POST', 'GET'));
+                goto not_default_pruebas;
+            }
+
+            return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::pruebasAction',  '_route' => 'default_pruebas',);
+        }
+        not_default_pruebas:
+
+        // default_login
+        if ('/login' === $pathinfo) {
+            if (!in_array($canonicalMethod, array('POST', 'GET'))) {
+                $allow = array_merge($allow, array('POST', 'GET'));
+                goto not_default_login;
+            }
+
+            return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::loginAction',  '_route' => 'default_login',);
+        }
+        not_default_login:
 
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }

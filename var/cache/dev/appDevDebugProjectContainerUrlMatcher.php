@@ -120,14 +120,25 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
         // default_pruebas
         if ('/pruebas' === $pathinfo) {
-            if ('GET' !== $canonicalMethod) {
-                $allow[] = 'GET';
+            if (!in_array($canonicalMethod, array('POST', 'GET'))) {
+                $allow = array_merge($allow, array('POST', 'GET'));
                 goto not_default_pruebas;
             }
 
             return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::pruebasAction',  '_route' => 'default_pruebas',);
         }
         not_default_pruebas:
+
+        // default_login
+        if ('/login' === $pathinfo) {
+            if (!in_array($canonicalMethod, array('POST', 'GET'))) {
+                $allow = array_merge($allow, array('POST', 'GET'));
+                goto not_default_login;
+            }
+
+            return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::loginAction',  '_route' => 'default_login',);
+        }
+        not_default_login:
 
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }

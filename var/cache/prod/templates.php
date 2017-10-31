@@ -82,6 +82,7 @@
   'SwiftmailerBundle:Collector:swiftmailer.html.twig' => __DIR__.'/../../../vendor/symfony/swiftmailer-bundle/Resources/views/Collector/swiftmailer.html.twig',
   'DoctrineBundle:Collector:db.html.twig' => __DIR__.'/../../../vendor/doctrine/doctrine-bundle/Resources/views/Collector/db.html.twig',
   'DoctrineBundle:Collector:explain.html.twig' => __DIR__.'/../../../vendor/doctrine/doctrine-bundle/Resources/views/Collector/explain.html.twig',
+  'BackendBundle:Default:index.html.twig' => __DIR__.'/../../../src/BackendBundle/Resources/views/Default/index.html.twig',
   '::base.html.twig' => __DIR__.'/../../../app/Resources/views/base.html.twig',
   ':default:index.html.twig' => __DIR__.'/../../../app/Resources/views/default/index.html.twig',
   ':lucky:number.html.twig' => __DIR__.'/../../../app/Resources/views/lucky/number.html.twig',
