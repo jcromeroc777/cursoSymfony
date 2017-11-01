@@ -140,6 +140,28 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
         }
         not_default_login:
 
+        // user_new
+        if ('/user/new' === $pathinfo) {
+            if ('POST' !== $canonicalMethod) {
+                $allow[] = 'POST';
+                goto not_user_new;
+            }
+
+            return array (  '_controller' => 'AppBundle\\Controller\\UserController::newAction',  '_route' => 'user_new',);
+        }
+        not_user_new:
+
+        // user_edit
+        if ('/user/edit' === $pathinfo) {
+            if ('POST' !== $canonicalMethod) {
+                $allow[] = 'POST';
+                goto not_user_edit;
+            }
+
+            return array (  '_controller' => 'AppBundle\\Controller\\UserController::editAction',  '_route' => 'user_edit',);
+        }
+        not_user_edit:
+
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }
 }

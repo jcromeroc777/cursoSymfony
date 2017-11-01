@@ -36,24 +36,27 @@ class DefaultController extends Controller
         if($json != null)
         {
             //Convertimos un objeto de php
-            $paramenters = json_decode($json);
+            $parameters = json_decode($json);
 
-            $email = (isset($paramenters->email)) ? $paramenters->email : null;
-            $password = (isset($paramenters->password)) ? $paramenters->password : null;
-            $getHash = (isset($paramenters->getHash)) ? $paramenters->getHash : null;
+            $email = (isset($parameters->email)) ? $parameters->email : null;
+            $password = (isset($parameters->password)) ? $parameters->password : null;
+            $getHash = (isset($parameters->getHash)) ? $parameters->getHash : null;
 
             $emailConstraint = new Assert\Email();
             $emailConstraint->message = 'This email is not valid';
             $validateEmail = $this->get('validator')->validate($email, $emailConstraint);
+
+            //cifrar la contraseña
+            $pwd = hash('sha256',$password);
 
             if($email != null && count($validateEmail) == 0 && $password != null)
             {
                 $jwtAuth = $this->get(JwtAuth::class);
 
                 if($getHash == null || $getHash == false)
-                    $singup = $jwtAuth->signup($email, $password, null);
+                    $singup = $jwtAuth->signup($email, $pwd, null);
                 else
-                    $singup = $jwtAuth->signup($email, $password, true);
+                    $singup = $jwtAuth->signup($email, $pwd, true);
 
                 //se hace el login
                 return $this->json($singup);
