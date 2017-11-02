@@ -162,6 +162,75 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
         }
         not_user_edit:
 
+        if (0 === strpos($pathinfo, '/task')) {
+            // task_new
+            if ('/task/new' === $pathinfo) {
+                if ('POST' !== $canonicalMethod) {
+                    $allow[] = 'POST';
+                    goto not_task_new;
+                }
+
+                return array (  '_controller' => 'AppBundle\\Controller\\TaskController::newAction',  '_route' => 'task_new',);
+            }
+            not_task_new:
+
+            // task_edit
+            if (0 === strpos($pathinfo, '/task/edit') && preg_match('#^/task/edit(?:/(?P<id>[^/]++))?$#s', $pathinfo, $matches)) {
+                if ('POST' !== $canonicalMethod) {
+                    $allow[] = 'POST';
+                    goto not_task_edit;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'task_edit')), array (  '_controller' => 'AppBundle\\Controller\\TaskController::newAction',  'id' => NULL,));
+            }
+            not_task_edit:
+
+            // task_list
+            if ('/task/list' === $pathinfo) {
+                if ('POST' !== $canonicalMethod) {
+                    $allow[] = 'POST';
+                    goto not_task_list;
+                }
+
+                return array (  '_controller' => 'AppBundle\\Controller\\TaskController::tasksAction',  '_route' => 'task_list',);
+            }
+            not_task_list:
+
+            // task_detail
+            if (0 === strpos($pathinfo, '/task/detail') && preg_match('#^/task/detail(?:/(?P<id>[^/]++))?$#s', $pathinfo, $matches)) {
+                if ('POST' !== $canonicalMethod) {
+                    $allow[] = 'POST';
+                    goto not_task_detail;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'task_detail')), array (  '_controller' => 'AppBundle\\Controller\\TaskController::taskAction',  'id' => NULL,));
+            }
+            not_task_detail:
+
+            // task_search
+            if (0 === strpos($pathinfo, '/task/search') && preg_match('#^/task/search(?:/(?P<search>[^/]++))?$#s', $pathinfo, $matches)) {
+                if ('POST' !== $canonicalMethod) {
+                    $allow[] = 'POST';
+                    goto not_task_search;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'task_search')), array (  '_controller' => 'AppBundle\\Controller\\TaskController::searchAction',  'search' => NULL,));
+            }
+            not_task_search:
+
+            // task_remove
+            if (0 === strpos($pathinfo, '/task/remove') && preg_match('#^/task/remove(?:/(?P<id>[^/]++))?$#s', $pathinfo, $matches)) {
+                if ('POST' !== $canonicalMethod) {
+                    $allow[] = 'POST';
+                    goto not_task_remove;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'task_remove')), array (  '_controller' => 'AppBundle\\Controller\\TaskController::removeAction',  'id' => NULL,));
+            }
+            not_task_remove:
+
+        }
+
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }
 }
